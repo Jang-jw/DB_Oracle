@@ -1,0 +1,183 @@
+SELECT EMPLOYEE_ID
+     , JOB_ID
+     , NVL(COMMISSION_PCT , 0.5) AS COMMISSION_PCT
+     , MANAGER_ID
+  FROM EMPLOYEES
+ WHERE MANAGER_ID = 100 ;
+ 
+SELECT A.EMPLOYEE_ID
+     , A.EMAIL
+     , A.SALARY
+     , B.DEPARTMENT_NAME
+  FROM EMPLOYEES A
+     , DEPARTMENTS B
+ WHERE A.DEPARTMENT_ID = DEPARTMENTS.DEPARTMENT_ID ;
+ 
+1. FROM
+2. WHERE
+3. GROUP BY
+4. HAVING
+5. SELECT
+6. ORDER BY 
+
+
+1. DML : INSERT , UPDATE , DELETE , MERGE
+2. DDL : CREATE , ALTER , DROP , RENAME , TRUNCATE
+3. DCL : GRANT , REVOKE , ROLE
+
+
+SELECT JOB_ID , AVG(SALARY) AS 평균연봉
+ FROM EMPLOYEES
+WHERE AVG(SALARY) > 13000
+GROUP BY JOB_ID ;
+
+SELECT JOB_ID
+     , AVG(SALARY) AS 평균연봉
+ FROM EMPLOYEES
+GROUP BY JOB_ID
+HAVING AVG(SALARY) > 13000
+ORDER BY 평균연봉 DESC ;
+
+SELECT JOB_ID
+     , SALARY
+  FROM EMPLOYEES ;
+  
+  
+SELECT *
+  FROM (
+        SELECT EMPLOYEE_ID
+             , EMAIL
+             , SALARY
+          FROM EMPLOYEES
+         ORDER BY SALARY DESC
+         )
+ WHERE ROWNUM <= 5 ;
+ 
+ 
+SELECT *
+  FROM EMPLOYEES ;
+SELECT *
+  FROM DEPARTMENTS ;
+  
+SELECT A.EMPLOYEE_ID
+     , A.EMAIL
+     , A.SALARY
+     , B.DEPARTMENT_NAME
+     , B.LOCATION_ID
+  FROM EMPLOYEES A JOIN DEPARTMENTS B
+    ON A.DEPARTMENT_ID = B.DEPARTMENT_ID
+   AND A.SALARY >= 14000 ;
+   
+   
+--오라클 방식 쿼리
+SELECT A.DEPARTMENT_ID
+ , A.DEPARTMENT_NAME
+ , A.MANAGER_ID
+ , B.FIRST_NAME
+ , B.LAST_NAME
+ FROM DEPARTMENTS A
+ , EMPLOYEES B
+WHERE A.MANAGER_ID = B.EMPLOYEE_ID(+)
+ AND A.LOCATION_ID = 1700 ;
+ 
+ 
+--ANSI 방식 쿼리 
+SELECT A.DEPARTMENT_ID
+     , A.DEPARTMENT_NAME
+     , A.MANAGER_ID
+     , B.FIRST_NAME
+     , B.LAST_NAME
+  FROM DEPARTMENTS A LEFT OUTER JOIN EMPLOYEES B
+    ON A.MANAGER_ID = B.EMPLOYEE_ID
+   AND A.LOCATION_ID = 1700 ;
+
+
+CREATE TABLE TB_STUDENT (
+       STUDENT_ID NUMBER NOT NULL ,
+       STUDENT_NAME VARCHAR2(50) NOT NULL ,
+       AGE NUMBER DEFAULT 20 ,
+       MAJOR_ID VARCHAR2(50) DEFAULT NULL
+                          ) ;
+                          
+                          
+CREATE TABLE TB_MAJOR (
+       MAJOR_ID VARCHAR2(50) NOT NULL ,
+       MAJOR_NAME VARCHAR2(100) NOT NULL ,
+       INST_DY VARCHAR2(8) NOT NULL
+       ) ;
+                          
+ALTER TABLE TB_STUDENT ADD CONSTRAINT PK_STUDENT PRIMARY KEY (STUDENT_ID) ;    
+ALTER TABLE TB_MAJOR ADD CONSTRAINT PK_MAJOR PRIMARY KEY (MAJOR_ID) ;
+
+MAJOR_ID MAJOR_NAME INST_DY
+M0001 정보공학과 19960201
+M0002 경영학과 20000302
+
+SELECT * FROM TB_MAJOR ;
+
+INSERT INTO TB_MAJOR (
+                MAJOR_ID
+              , MAJOR_NAME
+              , INST_DY
+              ) VALUES (
+              'M0001'
+            , '정보공학과'
+            , '19960201'
+            ) ;
+INSERT INTO TB_MAJOR (
+                MAJOR_ID
+              , MAJOR_NAME
+              , INST_DY
+              ) VALUES (
+              'M0002'
+            , '경영학과'
+            , '20000302'
+            ) ;
+            
+INSERT INTO TB_STUDENT (
+                STUDENT_ID
+              , STUDENT_NAME
+              , AGE
+              , MAJOR_ID
+              ) VALUES (
+              '1000'
+            , '김철수'
+            , 20
+            , 'M0001'
+            ) ;
+            
+INSERT INTO TB_STUDENT (
+                STUDENT_ID
+              , STUDENT_NAME
+              , AGE
+              , MAJOR_ID
+              ) VALUES (
+              '2000'
+            , '홍길동'
+            , 21
+            , 'M0002'
+            ) ;
+
+COMMIT ;
+            
+SELECT * FROM TB_MAJOR ;     
+            
+UPDATE TB_MAJOR SET MAJOR_NAME = '인공지능융합과' WHERE MAJOR_NAME = '정보공학과' ;
+
+COMMIT ;
+
+SELECT * FROM TB_STUDENT ; 
+
+DELETE FROM TB_STUDENT WHERE STUDENT_ID = 1000 ; 
+
+ROLLBACK ;
+
+SELECT * FROM MEMBER ;
+
+DELETE FROM MEMBER WHERE ID = '장재욱' ;
+
+CREATE TABLE MEMBER ( 
+            ID VARCHAR2(20) NOT NULL ,
+            PW VARCHAR2(20) NOT NULL ,
+            AGE NUMBER(10) NOT NULL
+            ) ;
